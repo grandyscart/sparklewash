@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Devanand</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- handwriting style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="card">
+        <h1>Devanand</h1>
+
+        <p>
+            Devanand is a simple and unique person with his own interests and style.
+            He loves gaming and enjoys spending time in virtual worlds.
+            His favorite type of games are non-PvP games, where he can explore, build,
+            and enjoy peaceful gameplay without competition.
+        </p>
+
+    </div>
+
+</body>
+</html>
+
+  
