@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SparkleWash — Doorstep Car Wash</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0066FF;
+  --primary-dark: #0044BB;
+  --primary-glow: rgba(0,102,255,0.3);
+  --accent: #00E5FF;
+  --accent2: #7B2FFF;
+  --bg: #030712;
+  --bg2: #080F1E;
+  --bg3: #0D1929;
+  --surface: rgba(255,255,255,0.04);
+  --surface2: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(0,102,255,0.3);
+  --text: #F0F4FF;
+  --muted: #8892A4;
+  --success: #00C896;
+  --warning: #FFB800;
+  --danger: #FF4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:.3s;backdrop-filter:blur(20px);border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(3,7,18,0.95);border-bottom-color:var(--border)}
+.logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{color:var(--primary);-webkit-text-fill-color:var(--primary)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:.3s;letter-spacing:.02em}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--primary);color:#fff;padding:.6rem 1.4rem;border-radius:50px;font-weight:600;font-size:.9rem;text-decoration:none;transition:.3s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.nav-cta:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:.3s;border-radius:2px}
+
+/* HERO */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,255,0.15) 0%, transparent 70%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 100%, rgba(123,47,255,0.1) 0%, transparent 60%)}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px, transparent 1px);background-size:60px 60px;animation:gridMove 20s linear infinite}
+@keyframes gridMove{0%{transform:translateY(0)}100%{transform:translateY(60px)}}
+.particles{position:absolute;inset:0;pointer-events:none}
+.particle{position:absolute;border-radius:50%;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-100px) scale(1);opacity:0}}
+.hero-content{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 2rem;padding-top:100px;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,102,255,0.15);border:1px solid rgba(0,102,255,0.3);border-radius:50px;padding:.4rem 1rem;font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:1.5rem;animation:fadeUp .8s ease forwards}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}}
+.hero-title{font-size:clamp(2.8rem,5vw,4.5rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem;animation:fadeUp .8s .1s ease both}
+.hero-title .gradient{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:480px;line-height:1.7;margin-bottom:2.5rem;animation:fadeUp .8s .2s ease both}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
+.btn-primary{background:var(--primary);color:#fff;padding:.9rem 2rem;border-radius:50px;font-weight:600;font-size:1rem;text-decoration:none;transition:.3s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 20px 40px var(--primary-glow)}
+.btn-outline{background:transparent;color:var(--text);padding:.9rem 2rem;border-radius:50px;font-weight:600;font-size:1rem;text-decoration:none;transition:.3s;border:1px solid var(--border2);cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:.5rem}
+.btn-outline:hover{background:var(--surface);border-color:var(--primary);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:2rem;margin-top:3rem;animation:fadeUp .8s .4s ease both}
+.hero-stat{text-align:center}
+.hero-stat .num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-stat .label{font-size:.8rem;color:var(--muted)}
+.hero-visual{position:relative;animation:fadeIn 1s .5s ease both}
+@keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.car-showcase{position:relative;width:100%;aspect-ratio:1.2;background:var(--surface);border-radius:2rem;border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.car-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%, rgba(0,102,255,0.2) 0%, transparent 60%)}
+.car-showcase::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(transparent,rgba(0,102,255,0.1))}
+.car-svg{width:85%;filter:drop-shadow(0 20px 60px rgba(0,102,255,0.4));animation:carFloat 4s ease-in-out infinite}
+@keyframes carFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.water-drops{position:absolute;top:10%;left:10%;right:10%;bottom:10%;pointer-events:none}
+.drop{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--accent);animation:dropFall linear infinite;opacity:0}
+@keyframes dropFall{0%{opacity:0;transform:translateY(-20px)}20%{opacity:.8}80%{opacity:.3}100%{opacity:0;transform:translateY(100px)}}
+.floating-badge{position:absolute;background:var(--bg3);border:1px solid var(--border2);border-radius:1rem;padding:.8rem 1.2rem;display:flex;align-items:center;gap:.7rem;font-size:.85rem;font-weight:600;animation:badgeFloat 3s ease-in-out infinite}
+.floating-badge.b1{top:15%;left:-5%;animation-delay:0s}
+.floating-badge.b2{bottom:25%;right:-5%;animation-delay:1.5s}
+.floating-badge .icon{width:32px;height:32px;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+@keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+section{padding:6rem 2rem;max-width:1400px;margin:0 auto}
+.section-tag{display:inline-block;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.2);color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem 1rem;border-radius:50px;margin-bottom:1rem}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:1rem}
+.section-sub{color:var(--muted);font-size:1rem;max-width:560px;line-height:1.7}
+.section-header{text-align:center;margin-bottom:4rem}
+
+/* VEHICLE SELECTOR */
+.vehicles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:3rem}
+.vehicle-card{background:var(--surface);border:1px solid var(--border);border-radius:1.2rem;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.vehicle-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),var(--accent));opacity:0;transition:.3s}
+.vehicle-card:hover,.vehicle-card.active{border-color:var(--primary);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,102,255,0.2)}
+.vehicle-card.active::before{opacity:.08}
+.vehicle-card .v-icon{font-size:3rem;margin-bottom:.8rem;display:block;transition:.3s}
+.vehicle-card:hover .v-icon,.vehicle-card.active .v-icon{transform:scale(1.1)}
+.vehicle-card .v-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+.vehicle-card .v-price{color:var(--primary);font-weight:600;font-size:.85rem}
+.vehicle-card .v-time{color:var(--muted);font-size:.75rem}
+.vehicle-card.active .v-name{color:var(--accent)}
+
+/* PACKAGES */
+.packages-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.package-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;padding:2rem;cursor:pointer;transition:.4s;position:relative;overflow:hidden}
+.package-card::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent 0deg,rgba(0,102,255,0.05) 90deg,transparent 180deg);animation:rotateBg 8s linear infinite;opacity:0;transition:.3s}
+.package-card:hover::after,.package-card.selected::after{opacity:1}
+.package-card.popular{border-color:var(--primary);background:linear-gradient(135deg,rgba(0,102,255,0.08),rgba(0,229,255,0.04))}
+.pkg-badge{display:inline-block;background:var(--primary);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .7rem;border-radius:50px;margin-bottom:1rem}
+.pkg-name{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
+.pkg-price{font-size:2rem;font-weight:800;font-family:'Syne',sans-serif;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1rem}
+.pkg-price span{font-size:1rem;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.pkg-features{list-style:none;space-y:4px}
+.pkg-features li{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.9rem;padding:.3rem 0}
+.pkg-features li::before{content:'✓';color:var(--success);font-weight:800;font-size:.9rem}
+.pkg-select-btn{width:100%;margin-top:1.5rem;padding:.8rem;border-radius:.8rem;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:.3s}
+.pkg-select-btn:hover,.package-card.selected .pkg-select-btn{background:var(--primary);border-color:var(--primary);color:#fff}
+@keyframes rotateBg{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+/* ADDONS */
+.addons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.addon-card{background:var(--surface);border:1px solid var(--border);border-radius:1rem;padding:1.2rem;cursor:pointer;transition:.3s;position:relative}
+.addon-card.checked{border-color:var(--primary);background:rgba(0,102,255,0.06)}
+.addon-card .a-icon{font-size:1.8rem;margin-bottom:.6rem}
+.addon-card .a-name{font-weight:600;font-size:.9rem;margin-bottom:.3rem}
+.addon-card .a-price{color:var(--primary);font-weight:700;font-size:.9rem}
+.addon-card .a-desc{color:var(--muted);font-size:.78rem;margin-top:.3rem}
+.addon-card .a-check{position:absolute;top:.8rem;right:.8rem;width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:.3s;font-size:.7rem}
+.addon-card.checked .a-check{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* CALCULATOR */
+.calc-box{background:var(--bg2);border:1px solid var(--border);border-radius:1.5rem;padding:2.5rem;max-width:600px;margin:0 auto}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--border)}
+.calc-row:last-of-type{border-bottom:none}
+.calc-label{color:var(--muted);font-size:.9rem}
+.calc-value{font-weight:600;font-size:.9rem}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;background:linear-gradient(135deg,rgba(0,102,255,0.1),rgba(0,229,255,0.05));border-radius:1rem;margin-top:1.5rem;border:1px solid rgba(0,102,255,0.2)}
+.calc-total .label{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700}
+.calc-total .amount{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.discount-badge{background:rgba(0,200,150,0.1);color:var(--success);border:1px solid rgba(0,200,150,0.2);border-radius:.5rem;padding:.2rem .6rem;font-size:.75rem;font-weight:600}
+
+/* BOOKING */
+.booking-flow{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--muted);margin-bottom:.5rem;letter-spacing:.02em}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:.8rem;padding:.85rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;transition:.3s;outline:none}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+.form-group select option{background:var(--bg2)}
+.booking-summary{background:var(--bg2);border:1px solid var(--border);border-radius:1.5rem;padding:2rem;position:sticky;top:100px}
+.booking-summary h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.summary-item{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;font-size:.9rem;border-bottom:1px solid var(--border)}
+.summary-item:last-of-type{border-bottom:none}
+.summary-total{background:var(--primary);border-radius:1rem;padding:1rem 1.5rem;text-align:center;margin-top:1.5rem}
+.summary-total .t-label{font-size:.8rem;opacity:.8;margin-bottom:.3rem}
+.summary-total .t-amount{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800}
+.time-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.5rem}
+.time-slot{background:var(--surface);border:1px solid var(--border);border-radius:.6rem;padding:.5rem;text-align:center;font-size:.8rem;cursor:pointer;transition:.3s}
+.time-slot:hover,.time-slot.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* TRACKING */
+.tracking-section{background:var(--bg2);border:1px solid var(--border);border-radius:1.5rem;padding:2.5rem;max-width:700px;margin:0 auto}
+.track-steps{display:flex;align-items:center;margin-bottom:3rem}
+.track-step{flex:1;text-align:center;position:relative}
+.track-step::after{content:'';position:absolute;top:18px;left:50%;right:-50%;height:2px;background:var(--border)}
+.track-step:last-child::after{display:none}
+.track-step.done::after{background:var(--primary)}
+.step-dot{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:var(--bg);margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;font-size:.8rem;position:relative;z-index:1;transition:.3s}
+.track-step.done .step-dot,.track-step.active .step-dot{border-color:var(--primary);background:var(--primary);color:#fff}
+.track-step.active .step-dot{animation:stepPulse 1.5s ease infinite}
+@keyframes stepPulse{0%,100%{box-shadow:0 0 0 0 var(--primary-glow)}50%{box-shadow:0 0 0 10px transparent}}
+.step-label{font-size:.75rem;color:var(--muted);font-weight:600}
+.track-step.done .step-label,.track-step.active .step-label{color:var(--text)}
+.worker-info{display:flex;align-items:center;gap:1.5rem;padding:1.5rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border)}
+.worker-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;flex-shrink:0}
+.worker-details{flex:1}
+.worker-name{font-weight:700;margin-bottom:.2rem}
+.worker-rating{color:var(--warning);font-size:.85rem}
+.worker-eta{margin-left:auto;text-align:right}
+.eta-time{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--accent)}
+.eta-label{font-size:.75rem;color:var(--muted)}
+.live-map{background:var(--surface);border:1px solid var(--border);border-radius:1rem;height:200px;margin-top:1.5rem;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.map-placeholder{text-align:center;color:var(--muted)}
+.map-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--primary);animation:mapPulse 1.5s ease infinite}
+@keyframes mapPulse{0%,100%{box-shadow:0 0 0 0 var(--primary-glow)}50%{box-shadow:0 0 0 15px transparent}}
+.map-route{position:absolute;width:60%;height:2px;background:linear-gradient(90deg,var(--primary),transparent);top:50%;left:10%;border-radius:2px}
+
+/* REVIEWS */
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:1.2rem;padding:1.8rem;transition:.3s}
+.review-card:hover{border-color:var(--primary);transform:translateY(-4px)}
+.review-stars{color:var(--warning);font-size:1.1rem;margin-bottom:1rem;letter-spacing:2px}
+.review-text{color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:1.5rem}
+.review-author{display:flex;align-items:center;gap.8rem;gap:.8rem}
+.author-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
+.author-name{font-weight:600;font-size:.9rem}
+.author-city{color:var(--muted);font-size:.78rem}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem;border-radius:.8rem;overflow:hidden}
+.ba-side{padding:1.5rem;text-align:center;font-size:.75rem;font-weight:700;letter-spacing:.06em}
+.ba-side.before{background:rgba(255,68,68,0.1);color:var(--danger)}
+.ba-side.after{background:rgba(0,200,150,0.1);color:var(--success)}
+.ba-icon{font-size:2.5rem;display:block;margin-bottom:.5rem}
+
+/* PAYMENT */
+.payment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
+.pay-method{background:var(--surface);border:1px solid var(--border);border-radius:1rem;padding:1.2rem;text-align:center;cursor:pointer;transition:.3s}
+.pay-method:hover,.pay-method.active{border-color:var(--primary);background:rgba(0,102,255,0.06)}
+.pay-icon{font-size:2rem;margin-bottom:.5rem;display:block}
+.pay-name{font-weight:600;font-size:.85rem}
+
+/* PLANS */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;padding:2rem;text-align:center;transition:.4s;position:relative;overflow:hidden}
+.plan-card.featured{border-color:var(--primary);background:linear-gradient(135deg,rgba(0,102,255,0.08),rgba(0,229,255,0.04))}
+.plan-card.featured::before{content:'MOST POPULAR';position:absolute;top:1rem;right:-1.5rem;background:var(--primary);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:.3rem 2.5rem;transform:rotate(15deg)}
+.plan-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:.5rem}
+.plan-price{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:.8rem 0}
+.plan-price sup{font-size:1rem;-webkit-text-fill-color:var(--muted);color:var(--muted)}
+.plan-price sub{font-size:.9rem;-webkit-text-fill-color:var(--muted);color:var(--muted)}
+.plan-features{list-style:none;text-align:left;margin:1.5rem 0}
+.plan-features li{padding:.4rem 0;font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:.5rem}
+.plan-features li::before{content:'✓';color:var(--success);font-weight:800;flex-shrink:0}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.3rem 0;cursor:pointer;font-weight:600;font-size:1rem;transition:.3s}
+.faq-q:hover{color:var(--primary)}
+.faq-icon{font-size:1.2rem;color:var(--primary);transition:.3s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:.4s ease;color:var(--muted);font-size:.9rem;line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:1rem}
+
+/* PROMO BANNER */
+.promo-banner{background:linear-gradient(135deg,rgba(0,102,255,0.1),rgba(123,47,255,0.1));border:1px solid rgba(0,102,255,0.2);border-radius:1.5rem;padding:3rem 4rem;text-align:center;position:relative;overflow:hidden}
+.promo-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent,rgba(0,102,255,0.05),transparent,rgba(123,47,255,0.05),transparent);animation:rotateBg 15s linear infinite}
+.promo-content{position:relative;z-index:1}
+.promo-code{display:inline-block;background:var(--primary);color:#fff;font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:.1em;padding:.5rem 2rem;border-radius:.5rem;margin:1.5rem 0;cursor:pointer;transition:.3s}
+.promo-code:hover{transform:scale(1.05)}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+.feature-card{text-align:center;padding:2rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:1.2rem;transition:.3s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transition:.3s;transform-origin:left}
+.feature-card:hover::before{transform:scaleX(1)}
+.feature-card:hover{transform:translateY(-4px);border-color:var(--border2)}
+.feature-icon{font-size:2.5rem;margin-bottom:1rem;display:block}
+.feature-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.5rem}
+.feature-desc{color:var(--muted);font-size:.85rem;line-height:1.6}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 2rem 2rem;margin-top:4rem}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand p{color:var(--muted);font-size:.9rem;line-height:1.7;margin-top:.8rem;max-width:280px}
+.footer-col h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;font-size:.95rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:.6rem}
+.footer-col a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:.3s}
+.footer-col a:hover{color:var(--primary)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{color:var(--muted);font-size:.85rem}
+.social-links{display:flex;gap:.8rem}
+.social-link{width:36px;height:36px;border-radius:.5rem;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;transition:.3s}
+.social-link:hover{background:var(--primary);border-color:var(--primary)}
+
+/* WHATSAPP */
+.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:999;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);animation:bounce 2s ease infinite;transition:.3s}
+.wa-float:hover{transform:scale(1.1) !important;animation:none}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* DARK MODE TOGGLE */
+.dark-toggle{cursor:pointer;font-size:1.2rem;padding:.4rem;border:none;background:transparent;color:var(--text)}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* MOBILE */
+@media(max-width:900px){
+  .hero-content{grid-template-columns:1fr;padding-top:120px}
+  .hero-visual{display:none}
+  .hero-stats{gap:1.2rem}
+  .booking-flow{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .track-steps{overflow-x:auto}
+  .promo-banner{padding:2rem}
+}
+@media(max-width:600px){
+  .footer-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap}
+  .hero-btns{flex-direction:column}
+  section{padding:4rem 1.2rem}
+}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid var(--border2);border-radius:.8rem;padding:1rem 1.5rem;z-index:9999;transition:.4s;opacity:0;font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.5rem}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-color:var(--success);color:var(--success)}
+
+/* LOADING */
+.page-loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;transition:.5s}
+.page-loader.done{opacity:0;pointer-events:none}
+.loader-logo{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoAnim 1.5s ease forwards}
+@keyframes logoAnim{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}
+.loader-bar{width:200px;height:3px;background:var(--surface);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));animation:load 1.5s ease forwards}
+@keyframes load{0%{width:0}100%{width:100%}}
+
+/* MOBILE NAV */
+.mobile-nav{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;opacity:0;pointer-events:none;transition:.4s}
+.mobile-nav.open{opacity:1;pointer-events:all}
+.mobile-nav a{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--text);text-decoration:none;transition:.3s}
+.mobile-nav a:hover{color:var(--primary)}
+.mobile-close{position:absolute;top:2rem;right:2rem;font-size:2rem;cursor:pointer;background:none;border:none;color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="page-loader" id="loader">
+  <div class="loader-logo">✦ SparkleWash</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#packages" onclick="closeMobileNav()">Packages</a>
+  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+  <a href="#booking" onclick="closeMobileNav()">Book Now</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">✦ Sparkle<span>Wash</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#booking">Booking</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <a href="#booking" class="nav-cta">Book Now ✦</a>
+    <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <div class="grid-lines"></div>
+    <div class="particles" id="particles"></div>
+  </div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge">🚗 Kerala's #1 Doorstep Car Wash</div>
+      <h1 class="hero-title">
+        Professional<br>Car Wash at<br><span class="gradient">Your Doorstep</span>
+      </h1>
+      <p class="hero-sub">Skip the queues. Our certified workers travel to you and deliver a showroom-quality clean — while you relax at home.</p>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-primary">📅 Book Now — Starts ₹299</a>
+        <a href="#packages" class="btn-outline">✦ View Packages</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num" data-target="1200">0</div><div class="label">Happy Customers</div></div>
+        <div class="hero-stat"><div class="num" data-target="48">0</div><div class="label">Expert Workers</div></div>
+        <div class="hero-stat"><div class="num" data-target="98">0</div><div class="label">% Satisfaction</div></div>
+        <div class="hero-stat"><div class="num" data-target="15">0</div><div class="label">Minutes to Book</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="car-showcase">
+        <div class="water-drops" id="waterDrops"></div>
+        <svg class="car-svg" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="200" cy="185" rx="180" ry="10" fill="rgba(0,102,255,0.15)"/>
+          <rect x="60" y="110" width="280" height="60" rx="12" fill="#1a2744"/>
+          <path d="M100 110 Q120 60 160 55 H240 Q280 55 300 110Z" fill="#1e2f5a"/>
+          <rect x="65" y="155" width="270" height="15" rx="4" fill="#0d1929"/>
+          <rect x="120" y="65" width="160" height="42" rx="8" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+          <circle cx="110" cy="175" r="22" fill="#111827" stroke="#0066FF" stroke-width="3"/>
+          <circle cx="110" cy="175" r="12" fill="#1a2744"/>
+          <circle cx="290" cy="175" r="22" fill="#111827" stroke="#0066FF" stroke-width="3"/>
+          <circle cx="290" cy="175" r="12" fill="#1a2744"/>
+          <rect x="67" y="120" width="40" height="22" rx="4" fill="rgba(0,229,255,0.15)" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
+          <rect x="293" y="120" width="40" height="22" rx="4" fill="rgba(255,150,50,0.4)" stroke="rgba(255,150,50,0.6)" stroke-width="1"/>
+          <path d="M195 115 L165 110 L185 90 L215 90 L235 110Z" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+          <path d="M220 115 L215 90 H240 Q260 90 265 110Z" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+          <circle cx="200" cy="95" r="3" fill="rgba(0,229,255,0.5)"/>
+          <path d="M185 120 Q200 100 215 120" stroke="rgba(0,229,255,0.2)" stroke-width="1" fill="none"/>
+        </svg>
+        <div class="floating-badge b1">
+          <div class="icon">⭐</div>
+          <div><div style="font-size:.7rem;color:var(--muted)">Rating</div><div>4.9/5.0</div></div>
+        </div>
+        <div class="floating-badge b2">
+          <div class="icon">⚡</div>
+          <div><div style="font-size:.7rem;color:var(--muted)">Avg Time</div><div>45 Mins</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section id="about">
+  <div class="section-header reveal">
+    <div class="section-tag">Why SparkleWash</div>
+    <h2 class="section-title">The Smarter Way<br>to Stay Clean</h2>
+    <p class="section-sub">No more wasting time at the car wash. We bring the full service to your doorstep, every time.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal"><span class="feature-icon">🏠</span><div class="feature-title">At Your Location</div><p class="feature-desc">We come to your home, office, or apartment. Zero travel time for you.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">🎓</span><div class="feature-title">Certified Workers</div><p class="feature-desc">All our workers are background-verified and professionally trained.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">💧</span><div class="feature-title">Eco-Friendly</div><p class="feature-desc">Water-efficient techniques that save up to 80% water vs traditional wash.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">📍</span><div class="feature-title">Live Tracking</div><p class="feature-desc">Track your worker in real-time, just like food delivery apps.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">💳</span><div class="feature-title">Easy Payments</div><p class="feature-desc">UPI, Google Pay, PhonePe, card or cash — you choose.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">🌟</span><div class="feature-title">Satisfaction Guaranteed</div><p class="feature-desc">Not satisfied? We re-wash for free or give you a full refund.</p></div>
+  </div>
+</section>
+
+<!-- VEHICLE SELECTOR -->
+<section id="services">
+  <div class="section-header reveal">
+    <div class="section-tag">Step 1</div>
+    <h2 class="section-title">Select Your Vehicle</h2>
+    <p class="section-sub">Different vehicles, different packages. Find the perfect clean for your ride.</p>
+  </div>
+  <div class="vehicles-grid" id="vehicleGrid">
+    <div class="vehicle-card active" data-vehicle="Hatchback" data-price="299" onclick="selectVehicle(this)">
+      <span class="v-icon">🚗</span>
+      <div class="v-name">Hatchback</div>
+      <div class="v-price">From ₹299</div>
+      <div class="v-time">⏱ 30–45 min</div>
+    </div>
+    <div class="vehicle-card" data-vehicle="Sedan" data-price="349" onclick="selectVehicle(this)">
+      <span class="v-icon">🚙</span>
+      <div class="v-name">Sedan</div>
+      <div class="v-price">From ₹349</div>
+      <div class="v-time">⏱ 35–50 min</div>
+    </div>
+    <div class="vehicle-card" data-vehicle="SUV" data-price="449" onclick="selectVehicle(this)">
+      <span class="v-icon">🛻</span>
+      <div class="v-name">SUV</div>
+      <div class="v-price">From ₹449</div>
+      <div class="v-time">⏱ 45–60 min</div>
+    </div>
+    <div class="vehicle-card" data-vehicle="Luxury" data-price="799" onclick="selectVehicle(this)">
+      <span class="v-icon">🏎️</span>
+      <div class="v-name">Luxury Car</div>
+      <div class="v-price">From ₹799</div>
+      <div class="v-time">⏱ 60–90 min</div>
+    </div>
+    <div class="vehicle-card" data-vehicle="Bike" data-price="149" onclick="selectVehicle(this)">
+      <span class="v-icon">🏍️</span>
+      <div class="v-name">Bike / Scooter</div>
+      <div class="v-price">From ₹149</div>
+      <div class="v-time">⏱ 20–30 min</div>
+    </div>
+    <div class="vehicle-card" data-vehicle="Van" data-price="599" onclick="selectVehicle(this)">
+      <span class="v-icon">🚐</span>
+      <div class="v-name">Van / Minibus</div>
+      <div class="v-price">From ₹599</div>
+      <div class="v-time">⏱ 60–80 min</div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="section-header reveal">
+    <div class="section-tag">Step 2</div>
+    <h2 class="section-title">Choose Your Package</h2>
+    <p class="section-sub">From quick refreshes to full detailing — we've got your car covered.</p>
+  </div>
+  <div class="packages-grid">
+    <div class="package-card" data-pkg="Basic" data-price="0" onclick="selectPackage(this)">
+      <div class="pkg-name">Basic Wash</div>
+      <div class="pkg-price">₹0 <span>add-on</span></div>
+      <ul class="pkg-features">
+        <li>Exterior Rinse & Wash</li>
+        <li>Tyre Cleaning</li>
+        <li>Window Wipe (Exterior)</li>
+        <li>Quick Dry</li>
+      </ul>
+      <button class="pkg-select-btn">Select Basic</button>
+    </div>
+    <div class="package-card popular" data-pkg="Standard" data-price="200" onclick="selectPackage(this)">
+      <div class="pkg-badge">⭐ Most Popular</div>
+      <div class="pkg-name">Standard Wash</div>
+      <div class="pkg-price">+₹200 <span>upgrade</span></div>
+      <ul class="pkg-features">
+        <li>Everything in Basic</li>
+        <li>Interior Cleaning</li>
+        <li>Dashboard Wipe</li>
+        <li>Vacuum Cleaning</li>
+        <li>Door Panels Cleaned</li>
+      </ul>
+      <button class="pkg-select-btn">Select Standard</button>
+    </div>
+    <div class="package-card" data-pkg="Premium" data-price="600" onclick="selectPackage(this)">
+      <div class="pkg-name">Premium Wash</div>
+      <div class="pkg-price">+₹600 <span>upgrade</span></div>
+      <ul class="pkg-features">
+        <li>Everything in Standard</li>
+        <li>Foam Cannon Wash</li>
+        <li>Wax & Polish</li>
+        <li>Interior Detailing</li>
+        <li>Tyre Shine</li>
+        <li>Glass Polishing</li>
+        <li>Seat Cleaning</li>
+      </ul>
+      <button class="pkg-select-btn">Select Premium</button>
+    </div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section>
+  <div class="section-header reveal">
+    <div class="section-tag">Step 3</div>
+    <h2 class="section-title">Add-On Services</h2>
+    <p class="section-sub">Extra services to make your car feel brand new.</p>
+  </div>
+  <div class="addons-grid" id="addonsGrid">
+    <div class="addon-card" data-name="Ceramic Coating" data-price="1500" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">🛡️</div>
+      <div class="a-name">Ceramic Coating</div>
+      <div class="a-price">+₹1,500</div>
+      <div class="a-desc">Long-lasting protection, up to 12 months</div>
+    </div>
+    <div class="addon-card" data-name="Engine Cleaning" data-price="400" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">⚙️</div>
+      <div class="a-name">Engine Cleaning</div>
+      <div class="a-price">+₹400</div>
+      <div class="a-desc">Safe degreasing and engine bay clean</div>
+    </div>
+    <div class="addon-card" data-name="Seat Shampoo" data-price="350" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">💺</div>
+      <div class="a-name">Seat Shampoo</div>
+      <div class="a-price">+₹350</div>
+      <div class="a-desc">Deep clean fabric and leather seats</div>
+    </div>
+    <div class="addon-card" data-name="Headlight Restore" data-price="250" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">💡</div>
+      <div class="a-name">Headlight Restore</div>
+      <div class="a-price">+₹250</div>
+      <div class="a-desc">Clear yellowed headlights, improve visibility</div>
+    </div>
+    <div class="addon-card" data-name="Odor Removal" data-price="200" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">🌸</div>
+      <div class="a-name">Odor Removal</div>
+      <div class="a-price">+₹200</div>
+      <div class="a-desc">Neutralize bad smells, leave fresh scent</div>
+    </div>
+    <div class="addon-card" data-name="Eco Waterless Wash" data-price="150" onclick="toggleAddon(this)">
+      <div class="a-check">✓</div>
+      <div class="a-icon">🌿</div>
+      <div class="a-name">Eco Waterless Wash</div>
+      <div class="a-price">+₹150</div>
+      <div class="a-desc">Zero water, zero guilt — environment friendly</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING CALCULATOR -->
+<section id="pricing">
+  <div class="section-header reveal">
+    <div class="section-tag">Live Calculator</div>
+    <h2 class="section-title">Your Price Estimate</h2>
+    <p class="section-sub">Updates instantly based on your selections above.</p>
+  </div>
+  <div class="calc-box reveal">
+    <div class="calc-row">
+      <span class="calc-label">🚗 Vehicle Type</span>
+      <span class="calc-value" id="calc-vehicle">Hatchback</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">📦 Package</span>
+      <span class="calc-value" id="calc-package">Basic Wash</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">🧰 Add-ons Selected</span>
+      <span class="calc-value" id="calc-addons">None</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">⏱ Estimated Time</span>
+      <span class="calc-value" id="calc-time">30–45 min</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">💰 Base Price</span>
+      <span class="calc-value" id="calc-base">₹299</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">🎁 First Order Discount</span>
+      <span class="calc-value" style="color:var(--success)">- ₹50 <span class="discount-badge">NEW USER</span></span>
+    </div>
+    <div class="calc-total">
+      <div>
+        <div class="label">Total Amount</div>
+        <div style="font-size:.8rem;color:rgba(255,255,255,.6);margin-top:.2rem">Including all taxes</div>
+      </div>
+      <div class="amount" id="calc-total">₹249</div>
+    </div>
+    <a href="#booking" class="btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;font-size:1rem">Book This Now →</a>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="section-header reveal">
+    <div class="section-tag">Book Now</div>
+    <h2 class="section-title">Confirm Your Booking</h2>
+    <p class="section-sub">Fill in your details and we'll dispatch a worker to your location.</p>
+  </div>
+  <div class="booking-flow">
+    <div class="reveal">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your full name" id="bName">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+91 XXXXX XXXXX" id="bPhone">
+      </div>
+      <div class="form-group">
+        <label>Vehicle Number</label>
+        <input type="text" placeholder="KL-XX-XXXX" id="bVehicle">
+      </div>
+      <div class="form-group">
+        <label>Address / Location</label>
+        <input type="text" placeholder="House No, Street, Area" id="bAddress">
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date" id="bDate">
+      </div>
+      <div class="form-group">
+        <label>Preferred Time</label>
+        <div class="time-slots">
+          <div class="time-slot active" onclick="selectTime(this)">7:00 AM</div>
+          <div class="time-slot" onclick="selectTime(this)">8:00 AM</div>
+          <div class="time-slot" onclick="selectTime(this)">9:00 AM</div>
+          <div class="time-slot" onclick="selectTime(this)">10:00 AM</div>
+          <div class="time-slot" onclick="selectTime(this)">11:00 AM</div>
+          <div class="time-slot" onclick="selectTime(this)">12:00 PM</div>
+          <div class="time-slot" onclick="selectTime(this)">2:00 PM</div>
+          <div class="time-slot" onclick="selectTime(this)">4:00 PM</div>
+          <div class="time-slot" onclick="selectTime(this)">6:00 PM</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Instructions (Optional)</label>
+        <textarea rows="3" placeholder="Any special instructions for the worker..." style="resize:vertical"></textarea>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+      <div style="margin-bottom:1.5rem">
+        <label style="display:block;font-size:.85rem;font-weight:600;color:var(--muted);margin-bottom:.8rem">Payment Method</label>
+        <div class="payment-grid">
+          <div class="pay-method active" onclick="selectPay(this)"><span class="pay-icon">📱</span><div class="pay-name">UPI</div></div>
+          <div class="pay-method" onclick="selectPay(this)"><span class="pay-icon">G</span><div class="pay-name">Google Pay</div></div>
+          <div class="pay-method" onclick="selectPay(this)"><span class="pay-icon">📲</span><div class="pay-name">PhonePe</div></div>
+          <div class="pay-method" onclick="selectPay(this)"><span class="pay-icon">💳</span><div class="pay-name">Card</div></div>
+          <div class="pay-method" onclick="selectPay(this)"><span class="pay-icon">💵</span><div class="pay-name">Cash</div></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:1rem" onclick="confirmBooking()">✦ Confirm Booking</button>
+    </div>
+
+    <div class="booking-summary reveal">
+      <h3>📋 Booking Summary</h3>
+      <div class="summary-item"><span>Vehicle</span><span id="s-vehicle">Hatchback</span></div>
+      <div class="summary-item"><span>Package</span><span id="s-pkg">Basic Wash</span></div>
+      <div class="summary-item"><span>Add-ons</span><span id="s-addons">None</span></div>
+      <div class="summary-item"><span>Date</span><span id="s-date">Not selected</span></div>
+      <div class="summary-item"><span>Time</span><span id="s-time">7:00 AM</span></div>
+      <div class="summary-item"><span>Discount</span><span style="color:var(--success)">-₹50</span></div>
+      <div class="summary-total">
+        <div class="t-label">Total Amount</div>
+        <div class="t-amount" id="s-total">₹249</div>
+      </div>
+      <div style="margin-top:1.5rem;padding:1rem;background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:.8rem;font-size:.85rem;color:var(--success)">
+        🛡️ 100% Satisfaction Guaranteed — or we re-wash for free!
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACKING -->
+<section id="tracking">
+  <div class="section-header reveal">
+    <div class="section-tag">Live Tracking</div>
+    <h2 class="section-title">Track Your Worker</h2>
+    <p class="section-sub">Real-time updates from booking to completion.</p>
+  </div>
+  <div class="tracking-section reveal">
+    <div class="track-steps">
+      <div class="track-step done">
+        <div class="step-dot">✓</div>
+        <div class="step-label">Booked</div>
+      </div>
+      <div class="track-step done">
+        <div class="step-dot">✓</div>
+        <div class="step-label">Confirmed</div>
+      </div>
+      <div class="track-step active">
+        <div class="step-dot">🚗</div>
+        <div class="step-label">On the Way</div>
+      </div>
+      <div class="track-step">
+        <div class="step-dot">🧹</div>
+        <div class="step-label">Washing</div>
+      </div>
+      <div class="track-step">
+        <div class="step-dot">✦</div>
+        <div class="step-label">Completed</div>
+      </div>
+    </div>
+    <div class="worker-info">
+      <div class="worker-avatar">RK</div>
+      <div class="worker-details">
+        <div class="worker-name">Rajan Kumar</div>
+        <div class="worker-rating">⭐⭐⭐⭐⭐ 4.9 (187 jobs)</div>
+        <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem">Certified Senior Detailer</div>
+      </div>
+      <div class="worker-eta">
+        <div class="eta-time" id="etaTime">12 min</div>
+        <div class="eta-label">ETA</div>
+      </div>
+    </div>
+    <div class="live-map">
+      <div class="map-route"></div>
+      <div class="map-dot" style="left:35%;top:50%"></div>
+      <div class="map-dot" style="left:70%;top:45%;background:var(--success);animation-delay:.5s"></div>
+      <div class="map-placeholder" style="position:absolute;bottom:1rem;right:1rem;font-size:.75rem">📍 Live Map</div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTION PLANS -->
+<section id="plans">
+  <div class="section-header reveal">
+    <div class="section-tag">Monthly Plans</div>
+    <h2 class="section-title">Subscribe & Save</h2>
+    <p class="section-sub">Regular washes at a fraction of the cost. Cancel anytime.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card reveal">
+      <div class="plan-name">Starter</div>
+      <div style="color:var(--muted);font-size:.85rem">2 washes / month</div>
+      <div class="plan-price"><sup>₹</sup>499<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>2 Basic Washes</li>
+        <li>Any Vehicle Type</li>
+        <li>Priority Booking</li>
+        <li>Cancel Anytime</li>
+      </ul>
+      <button class="btn-outline" style="width:100%;border-radius:.8rem" onclick="showToast('Starter plan selected! 🎉','success')">Get Starter</button>
+    </div>
+    <div class="plan-card featured reveal">
+      <div class="plan-name">Pro</div>
+      <div style="color:var(--muted);font-size:.85rem">4 washes / month</div>
+      <div class="plan-price"><sup>₹</sup>899<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>4 Standard Washes</li>
+        <li>1 Free Premium Upgrade</li>
+        <li>Priority Booking</li>
+        <li>WhatsApp Support</li>
+        <li>Cancel Anytime</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;border-radius:.8rem" onclick="showToast('Pro plan selected! 🚀','success')">Get Pro</button>
+    </div>
+    <div class="plan-card reveal">
+      <div class="plan-name">Elite</div>
+      <div style="color:var(--muted);font-size:.85rem">Unlimited washes</div>
+      <div class="plan-price"><sup>₹</sup>1,499<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>Unlimited Basic Washes</li>
+        <li>2 Premium Washes</li>
+        <li>Dedicated Worker</li>
+        <li>Emergency Quick Wash</li>
+        <li>All Add-ons 20% Off</li>
+        <li>Referral Bonuses</li>
+      </ul>
+      <button class="btn-outline" style="width:100%;border-radius:.8rem" onclick="showToast('Elite plan selected! 👑','success')">Get Elite</button>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-header reveal">
+    <div class="section-tag">Reviews</div>
+    <h2 class="section-title">What Customers Say</h2>
+    <p class="section-sub">Real reviews from real car owners across Kerala.</p>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="before-after">
+        <div class="ba-side before"><span class="ba-icon">😐</span>BEFORE</div>
+        <div class="ba-side after"><span class="ba-icon">✨</span>AFTER</div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Booked at 8 AM, worker arrived at 8:45. My Swift looks absolutely brand new! The foam wash is incredible. Highly recommend the Premium package."</div>
+      <div class="review-author">
+        <div class="author-avatar">AK</div>
+        <div><div class="author-name">Arjun Krishnan</div><div class="author-city">📍 Kannur</div></div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="before-after">
+        <div class="ba-side before"><span class="ba-icon">😩</span>BEFORE</div>
+        <div class="ba-side after"><span class="ba-icon">🤩</span>AFTER</div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"My Fortuner was filthy after a long road trip. SparkleWash did the full SUV Premium package. Seat shampoo add-on was totally worth it!"</div>
+      <div class="review-author">
+        <div class="author-avatar">PS</div>
+        <div><div class="author-name">Priya Suresh</div><div class="author-city">📍 Kozhikode</div></div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="before-after">
+        <div class="ba-side before"><span class="ba-icon">😓</span>BEFORE</div>
+        <div class="ba-side after"><span class="ba-icon">😍</span>AFTER</div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"As a busy doctor, I can't spend time at car washes. SparkleWash monthly plan solves this completely. My BMW gets washed while I'm seeing patients!"</div>
+      <div class="review-author">
+        <div class="author-avatar">DM</div>
+        <div><div class="author-name">Dr. Mujeeb</div><div class="author-city">📍 Calicut</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO -->
+<section>
+  <div class="promo-banner reveal">
+    <div class="promo-content">
+      <div class="section-tag">Limited Time Offer</div>
+      <h2 class="section-title" style="font-size:2.2rem">₹50 OFF Your First Wash</h2>
+      <p style="color:var(--muted);margin:.5rem 0 1rem">Use code at checkout. Valid for new users only.</p>
+      <div class="promo-code" onclick="copyCode()">SPARKLE50</div>
+      <p style="color:var(--muted);font-size:.85rem">Click to copy the code</p>
+      <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="#booking" class="btn-primary">Book & Save Now →</a>
+        <a href="https://wa.me/919999999999" class="btn-outline">💬 Chat on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Common Questions</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does a typical wash take? <span class="faq-icon">+</span></div>
+      <div class="faq-a">A Basic wash takes 30–45 minutes. Standard is 45–60 minutes. Premium can take 60–90 minutes. Exact time depends on vehicle size and add-ons selected.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do I need to provide water? <span class="faq-icon">+</span></div>
+      <div class="faq-a">No! Our workers carry their own equipment, including water tanks, pressure washers, and cleaning supplies. You don't need to provide anything.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is it safe for my car's paint? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Absolutely. We use only premium, pH-balanced car care products that are gentle on paint and safe for all coatings including ceramic and PPF.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How far in advance should I book? <span class="faq-icon">+</span></div>
+      <div class="faq-a">You can book same-day (subject to availability) or up to 30 days in advance. We recommend booking at least 2 hours ahead for same-day service.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What if I'm not satisfied with the wash? <span class="faq-icon">+</span></div>
+      <div class="faq-a">We offer a 100% satisfaction guarantee. If you're not happy, we'll send someone back to re-do the wash for free. Or we'll give you a full refund — your choice.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you service apartment complexes? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes! We regularly serve apartments, gated communities, office parks, and individual homes. Just ensure there's parking access for our worker.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">✦ SparkleWash</div>
+        <p>Kerala's premium doorstep car wash service. Professional, fast, and always at your convenience.</p>
+        <div style="margin-top:1rem;font-size:.85rem;color:var(--muted)">📞 +91 90000 00000<br>📧 hello@sparklwash.in<br>📍 Kannur, Kerala</div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#packages">Basic Wash</a></li>
+          <li><a href="#packages">Standard Wash</a></li>
+          <li><a href="#packages">Premium Wash</a></li>
+          <li><a href="#plans">Monthly Plans</a></li>
+          <li><a href="#">Corporate Packages</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 SparkleWash. Made with 💙 in Kerala, India.</p>
+      <div class="social-links">
+        <a class="social-link" href="#">📘</a>
+        <a class="social-link" href="#">📸</a>
+        <a class="social-link" href="#">🐦</a>
+        <a class="social-link" href="#">▶️</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/919999999999?text=Hi! I want to book a car wash." class="wa-float" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// LOADER
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done')},1600)})
+
+// PARTICLES
+const pContainer=document.getElementById('particles')
+for(let i=0;i<25;i++){
+  const p=document.createElement('div')
+  p.className='particle'
+  const size=Math.random()*4+2
+  p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${Math.random()>.5?'rgba(0,102,255,0.6)':'rgba(0,229,255,0.4)'};animation-duration:${Math.random()*15+8}s;animation-delay:${Math.random()*10}s`
+  pContainer.appendChild(p)
+}
+
+// WATER DROPS
+const wContainer=document.getElementById('waterDrops')
+if(wContainer){for(let i=0;i<18;i++){const d=document.createElement('div');d.className='drop';d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*4}s`;wContainer.appendChild(d)}}
+
+// NAV SCROLL
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)})
+
+// COUNTER ANIMATION
+const counters=document.querySelectorAll('[data-target]')
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=e.target,target=+el.dataset.target
+      let count=0,step=target/60
+      const timer=setInterval(()=>{count+=step;if(count>=target){el.textContent=target+(target===98?'%':'+');clearInterval(timer)}else el.textContent=Math.floor(count)+(target===98?'%':'+')},25)
+      observer.unobserve(el)
+    }
+  })
+},{threshold:.5})
+counters.forEach(c=>observer.observe(c))
+
+// REVEAL
+const revealEls=document.querySelectorAll('.reveal')
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target)}})
+},{threshold:.1,rootMargin:'0px 0px -50px 0px'})
+revealEls.forEach(el=>revObs.observe(el))
+
+// STATE
+let state={vehicle:'Hatchback',vehiclePrice:299,vehicleTime:'30–45 min',pkg:'Basic',pkgPrice:0,addons:[],addonTotal:0}
+
+function selectVehicle(el){
+  document.querySelectorAll('.vehicle-card').forEach(c=>c.classList.remove('active'))
+  el.classList.add('active')
+  state.vehicle=el.dataset.vehicle
+  state.vehiclePrice=+el.dataset.price
+  state.vehicleTime=el.querySelector('.v-time').textContent.replace('⏱ ','')
+  updateCalc()
+}
+
+function selectPackage(el){
+  document.querySelectorAll('.package-card').forEach(c=>c.classList.remove('selected'))
+  el.classList.add('selected')
+  state.pkg=el.dataset.pkg
+  state.pkgPrice=+el.dataset.price
+  updateCalc()
+}
+
+function toggleAddon(el){
+  el.classList.toggle('checked')
+  const name=el.dataset.name,price=+el.dataset.price
+  if(el.classList.contains('checked')){state.addons.push({name,price});state.addonTotal+=price}
+  else{state.addons=state.addons.filter(a=>a.name!==name);state.addonTotal-=price}
+  updateCalc()
+}
+
+function updateCalc(){
+  const base=state.vehiclePrice+state.pkgPrice
+  const total=base+state.addonTotal-50
+  document.getElementById('calc-vehicle').textContent=state.vehicle
+  document.getElementById('calc-package').textContent=state.pkg+' Wash'
+  document.getElementById('calc-addons').textContent=state.addons.length?state.addons.map(a=>a.name).join(', '):'None'
+  document.getElementById('calc-time').textContent=state.vehicleTime
+  document.getElementById('calc-base').textContent='₹'+base
+  document.getElementById('calc-total').textContent='₹'+Math.max(total,0)
+  document.getElementById('s-vehicle').textContent=state.vehicle
+  document.getElementById('s-pkg').textContent=state.pkg+' Wash'
+  document.getElementById('s-addons').textContent=state.addons.length?state.addons.length+' selected':'None'
+  document.getElementById('s-total').textContent='₹'+Math.max(total,0)
+}
+
+function selectTime(el){
+  document.querySelectorAll('.time-slot').forEach(t=>t.classList.remove('active'))
+  el.classList.add('active')
+  document.getElementById('s-time').textContent=el.textContent
+}
+
+function selectPay(el){
+  document.querySelectorAll('.pay-method').forEach(p=>p.classList.remove('active'))
+  el.classList.add('active')
+}
+
+document.getElementById('bDate')?.addEventListener('change',function(){
+  document.getElementById('s-date').textContent=this.value||'Not selected'
+})
+
+function confirmBooking(){
+  const name=document.getElementById('bName').value
+  const phone=document.getElementById('bPhone').value
+  const address=document.getElementById('bAddress').value
+  if(!name||!phone||!address){showToast('⚠️ Please fill all required fields','');return}
+  showToast('✅ Booking Confirmed! Worker will contact you shortly.','success')
+  setTimeout(()=>{document.getElementById('tracking').scrollIntoView({behavior:'smooth'})},1500)
+}
+
+function toggleFaq(el){
+  const item=el.parentElement
+  const isOpen=item.classList.contains('open')
+  document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('open'))
+  if(!isOpen)item.classList.add('open')
+}
+
+function copyCode(){
+  navigator.clipboard?.writeText('SPARKLE50').catch(()=>{})
+  showToast('✓ Code SPARKLE50 copied!','success')
+}
+
+function showToast(msg,type){
+  const t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),3500)
+}
+
+function openMobileNav(){document.getElementById('mobileNav').classList.add('open')}
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open')}
+
+// ETA countdown
+let eta=12
+setInterval(()=>{if(eta>0){eta--;document.getElementById('etaTime').textContent=eta+' min'}},5000)
+
+// Dark/Light toggle
+let isDark=true
+function toggleTheme(){
+  isDark=!isDark
+  document.documentElement.style.setProperty('--bg',isDark?'#030712':'#f8fafc')
+  document.documentElement.style.setProperty('--bg2',isDark?'#080F1E':'#f1f5f9')
+  document.documentElement.style.setProperty('--bg3',isDark?'#0D1929':'#e2e8f0')
+  document.documentElement.style.setProperty('--text',isDark?'#F0F4FF':'#0f172a')
+  document.documentElement.style.setProperty('--muted',isDark?'#8892A4':'#64748b')
+  document.documentElement.style.setProperty('--surface',isDark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.03)')
+  document.documentElement.style.setProperty('--border',isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.1)')
+  document.querySelector('.dark-toggle').textContent=isDark?'🌙':'☀️'
+}
+</script>
+</body>
+</html>
+
